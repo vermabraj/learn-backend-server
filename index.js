@@ -1,33 +1,34 @@
 const express = require("express");
-const { connection } = require("./configs/db");
-const { UserRouter } = require("./routes/User.route");
-const { ProductRouter } = require("./routes/Product.route");
-const { CartRouter } = require("./routes/Cart.route");
-const { AdminRouter } = require("./routes/Admin.route");
-require("dotenv").config();
 const cors = require("cors");
+const { connection } = require("./config/db");
+const { userRouter } = require("./Routes/User.Route");
+const { productRoute } = require("./Routes/Product.Route");
+const { cartRoute } = require("./Routes/Cart.Route");
+const { wishlistRoute } = require("./Routes/Wishlist.Route");
 
 const app = express();
+
 app.use(express.json());
 app.use(cors());
-
-// HOME
 app.get("/", (req, res) => {
-  res.send("ELECTRO GLAD");
+  res.send("Home Page");
 });
 
-// ROUTES
-app.use("/api/users", UserRouter);
-app.use("/api/products", ProductRouter);
-app.use("/api/cart", CartRouter);
-app.use("/api/admin", AdminRouter);
+app.use("/users", userRouter);
 
-app.listen(4500, async () => {
+app.use("/products", productRoute);
+
+app.use("/carts", cartRoute);
+
+app.use("/wishlist", wishlistRoute)
+
+app.listen(7500, async () => {
   try {
     await connection;
-    console.log("CONNECTED TO DB");
+    console.log("Connected to DB");
   } catch (error) {
+    console.log(" Cannot Connected to DB");
     console.log(error);
   }
-  console.log("RUNNING AT PORT 4500");
+  console.log("Running the server at port 7500");
 });
